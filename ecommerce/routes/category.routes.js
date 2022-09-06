@@ -5,5 +5,7 @@ const routes = (app) =>{
     app.get('/ecomm/api/v1/categories', CategoryController.getCategories);
 }
 
+// to export one thing 
+// module.exports = routes;
 module.exports = routes;
 
