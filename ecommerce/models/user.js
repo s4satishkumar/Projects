@@ -2,6 +2,8 @@
 const {
   Model
 } = require('sequelize');
+const bcrypt = require('bcryptjs');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -11,9 +13,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // this.belongsToMany(models.Role, { through: 'User_Roles' });
     }
   }
-  User.init({
+  User.init({ //User.init initilaizes User object
     email:{ /* constraints are being checked at mysql level in the db*/
       type: DataTypes.STRING,
       allowNull: false, //email should not be null
@@ -26,15 +29,22 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        len: [5,40], //password's length can be between 5 to 40 characters
+        len: [5, 20], //password's length can be between 5 to 40 characters
       } 
     },
     username: DataTypes.STRING
-    
-
   }, {
     sequelize,
     modelName: 'User',
   });
+  
+  /* this beforeCreate is a simple function known as a hook, will be running
+  everytime before creating the user object in user table */
+  User.beforeCreate((user) => {
+    const salt = bcrypt.genSaltSync(10);
+    let hashedPassword = bcrypt.hashSync(user.password, salt);
+    user.password = hashedPassword; //this line will replace user's actual password with hashed password
+  }); 
+  
   return User;
 };

@@ -1,5 +1,6 @@
-const {Category} = require('../models/index');
-
+console.log("hello")
+const {Category} = require('../models/index'); //error in this line
+console.log("hello")
 const getAllCategories = async() =>{
     const allCategoriesData = await Category.findAll();
     return allCategoriesData;

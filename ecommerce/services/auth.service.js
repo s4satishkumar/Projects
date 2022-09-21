@@ -1,5 +1,5 @@
 const {User} = require('../models/index');
-
+const bcrypt=require('bcryptjs');
 const signup = (data) =>{
     const response = User.create({
         username: data.username,
@@ -9,4 +9,17 @@ const signup = (data) =>{
     return response;
 }
 
-module.exports = {signup};
+
+const getUserByEmail = (data)=>{
+    const response=User.findOne({
+        where:{
+            email:data
+        }
+    });
+    return response;
+}
+
+const verifyPassword =(password,hashedPassword)=>{
+    return bcrypt.compareSync(password,hashedPassword);
+}
+module.exports = {signup,getUserByEmail,verifyPassword };
