@@ -1,5 +1,5 @@
 const authService = require('../services/auth.service');
-var jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 
 const signup = async(req, res) =>{
     const response = await authService.signup(req.body);
@@ -28,7 +28,7 @@ else{//user is present in the db for given email id
     const passwordVerifed =authService.verifyPassword(req.body.password, userData.password);
 
     if(passwordVerifed){
-        var token =jwt.sign({ email:userData.email, password:userData.password, username:userData.username}, process.env.JWT_SECRET_KEY);
+        var token =jwt.sign({ email:userData.email, password:userData.password, username:userData.username}, process.env.JWT_SECRET_KEY, {expiresIn: '2h'});
         return res.json({ 
             message: 'signed in successfully',
             success: true,
